@@ -1,5 +1,7 @@
 package com.adamyang21.metroidmod;
 
+import com.adamyang21.metroidmod.item.ModCreativeModeTabs;
+import com.adamyang21.metroidmod.item.ModItems;
 import com.mojang.logging.LogUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.item.BlockItem;
@@ -36,6 +38,8 @@ public class MetroidMod
     {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        ModItems.register(modEventBus);
+
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::commonSetup);
 
@@ -43,10 +47,17 @@ public class MetroidMod
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
-//        modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::addCreative);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+    }
+
+    private void addCreative(CreativeModeTabEvent.BuildContents event) {
+        if (event.getTab() == ModCreativeModeTabs.METROID_TAB) {
+            event.accept(ModItems.ARM_CANNON);
+            event.accept(ModItems.MISSILE_LAUNCHER);
+        }
     }
 
 //    private void addCreative(CreativeModeTabEvent.BuildContents event)
